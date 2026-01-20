@@ -15,42 +15,49 @@ Unlike static reports, this dashboard is **alive**. It features an integrated **
 ## 🎯 Core Capabilities
 
 ### 1. 🇮🇳 National vs. State Views (Persona Switching)
+
 - **Executive Hub**: Bird's-eye view of India's biometric ecosystem. Tracking National AGHI (61.8) and Update Success Rates.
 - **State Admin Mode**: One-click drill-down into specific states (e.g., **Maharashtra Pilot**). Visualizes district-level performance maps.
 - **Critical Operations**: A dedicated "Ops Monitor" for tracking SLA breaches and system failures.
 
 ### 2. 🧠 Proper AI Assistant (Backend Integrated)
+
 An intelligent conversational agent powered by `AGHIChatbot` logic.
+
 - **Data-Driven**: Reads live values from the backend dataset.
 - **Navigation**: Command it to *"Show me Bihar"* or *"Open Critical Ops"*.
 - **Comparison Engine**: Ask *"Compare Punjab and Gujarat"* to get a comparative gap analysis.
 - **Problem Detection**: Ask *"What is the problem in Maharashtra?"* to identify the weakest governance pillar.
 
 ### 3. ⚡ Operational Intelligence
+
 - **SLA Tracker**: Monitors Enrollment TAT (<3 days) and Update TAT (<5 days).
 - **Failure Analysis**: Visualizes root causes of transaction failures (Bio-Mismatch, Tech Errors).
 - **Live Ticker**: Real-time system feed simulating monitoring of 700+ districts.
 
 ---
 
-## � Component Guide
-
 ## 📖 Component Guide
 
 ### 1. 🧭 Header Navigation & Persona Switching
+
 The top bar acts as the central control deck. It uses a **"Pill-Style" Switcher** to toggle the dashboard's mode:
+
 - **National View**: The default aggregation level. Calculates averages from all 36 States/UTs.
 - **State Admin**: A "Drill-Down" mode. Specifically optimized for the **Maharashtra Pilot**. When clicked, it loads district-level CSV data and re-renders the map.
 - **Operations Manager**: Switches the UI to a "Dark Mode" aesthetic, focusing purely on technical health and error rates.
 
-### 2. � AGHI AI Command Center (Bottom-Right)
+### 2. 🧠 AGHI AI Command Center (Bottom-Right)
+
 A floating conversational agent that acts as a co-pilot.
+
 - **Backend-Powered**: Unlike simple chatbots, this sends your query to `backend/chatbot.py`.
 - **RAG Capability**: It "reads" the entire dataset to answer complex questions like *"What is the updated rate in Pune compared to Mumbai?"*.
 - **Action Triggers**: If you say *"Open Critical Ops"*, the AI doesn't just reply—it **executes** the layout switch automatically using the dashboard's API.
 - **Suggestion Chips**: One-click prompts (`[National View]`, `[Gen Report]`) for quick navigation.
 
 ### 3. 🗺️ Interactive Geospatial Map (Leaflet.js)
+
 - **Choropleth Logic**: The map automatically colors regions based on their AGHI Score:
   - 🟢 **Green (>80)**: Excellent Governance.
   - 🟡 **Yellow (40-80)**: Average Performance.
@@ -58,14 +65,17 @@ A floating conversational agent that acts as a co-pilot.
 - **Drill-Down**: Clicking a state zooms in to show district boundaries (currently active for Maharashtra).
 - **Search**: A fuzzy-search bar (`dashboard.js`) allows instant zooming to any locale.
 
-### 4. � Trend Analysis & KPI Cards
+### 4. 📊 Trend Analysis & KPI Cards
+
 - **Live KPIs**: The top row shows "National AGHI", "Update Success Rate", and "Digital Inclusion". These pulse to indicate live data feeds.
 - **Trend Lab (Plotly.js)**: The large line chart tracks performance over 12 months.
   - **Dynamic Metrics**: Browsing the dropdown alters the X/Y axis to show `Enrollments`, `Biometric Updates`, or `Demographic Changes`.
   - **Comparative View**: In State mode, it overlays the District's line against the State Average.
 
 ### 5. 🚨 Critical Operations Monitor (Ops View)
+
 A specialized view for technical oversight.
+
 - **SLA Tracker**: Visual progress bars showing adherence to statutory timelines (e.g., *Enrollment must be processed in <3 days*).
 - **Failure Root Cause Analysis**: A Donut Chart that breaks down *why* transactions fail (e.g., 45% due to Doc Quality, 15% due to Biometric Mismatch).
 - **Integrity Watchlist**: A prioritized table listing operators or regions flagged by the `AnomalyDetector` engine.
@@ -75,7 +85,9 @@ A specialized view for technical oversight.
 ## 🎨 Dashboard Layout & Visual Components
 
 ### Header Section
+
 **National Intelligence Header**
+
 - **System Vitality Badge**: Shows "OPTIMAL" status with color-coded indicators
 - **National Resilience Score**: Calculated metric showing governance stability
 - **Intervention Zones Counter**: Displays number of critical regions requiring attention
@@ -83,6 +95,7 @@ A specialized view for technical oversight.
 - **System Volume Bar**: Visual load indicator showing current processing capacity
 
 ### KPI Cards (Top Row)
+
 Five premium cards displaying real-time metrics:
 
 1. **National AGHI Card**
@@ -115,6 +128,7 @@ Five premium cards displaying real-time metrics:
 ### Main Dashboard Grid
 
 **Left Column (Large):**
+
 - **Interactive Map Container**
   - Breadcrumb navigation (India → State → District)
   - Search box for instant location lookup
@@ -123,6 +137,7 @@ Five premium cards displaying real-time metrics:
   - Hover tooltips with quick stats
 
 **Right Column (Small):**
+
 - **State Rankings Panel**
   - Toggle between "Top Performers" and "Priority States"
   - Scrollable list with rank badges
@@ -130,6 +145,7 @@ Five premium cards displaying real-time metrics:
   - Color-coded performance indicators
 
 **Full Width Row:**
+
 - **Trend Analysis Lab**
   - 5 mini-charts in a grid layout
   - Each chart tracks a different metric over 12 months
@@ -137,6 +153,7 @@ Five premium cards displaying real-time metrics:
   - Responsive design with synchronized time axes
 
 **Bottom Section:**
+
 - **AI Command Directives Terminal**
   - Terminal-style interface with monospace font
   - Real-time alert feed
@@ -144,6 +161,7 @@ Five premium cards displaying real-time metrics:
   - "SYSTEM MONITORING ACTIVE" status indicator
 
 ### Critical Operations Section (Ops View Only)
+
 Appears when "Operations" persona is selected:
 
 - **SLA Compliance Tracker**
@@ -162,7 +180,9 @@ Appears when "Operations" persona is selected:
   - "View All" button for detailed reports
 
 ### Footer
+
 **Intelligence Ticker**
+
 - Horizontal scrolling news feed
 - Live system updates (e.g., "Data Integrity Check: Passed 99.8%")
 - Icons for different alert types
@@ -176,7 +196,7 @@ Appears when "Operations" persona is selected:
   - `pandas` for high-performance data aggregation.
   - `scikit-learn` for anomaly detection (Isolation Forest).
   - Custom `AGHIChatbot` module for NLP intent recognition.
-- **Frontend**: 
+- **Frontend**:
   - **HTML5/CSS3**: Custom "Glassmorphism" Design System.
   - **Vanilla JavaScript**: Lightweight, dependency-free logic.
   - **Plotly.js**: Interactive Trend Charts and Heatmaps.
@@ -187,28 +207,35 @@ Appears when "Operations" persona is selected:
 ## 📦 Installation & Setup
 
 ### Prerequisites
+
 - Python 3.8+
 - `pip`
 
 ### Step 1: Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
+
 *(Key requirements: flask, pandas, numpy, scikit-learn)*
 
 ### Step 2: Launch the System
+
 ```bash
 python backend/app.py
 ```
 
 ### Step 3: Access Dashboard
+
 Open your secure browser channel:
 `http://localhost:5000/dashboard.html`
 
 ---
 
 ## 🤖 AI Commands to Try
+
 Once the dashboard is running, click the **Robot Icon** and try these:
+
 - `"Show me National"`
 - `"Analysis for Maharashtra"`
 - `"Compare Kerala and Assam"`
@@ -217,7 +244,26 @@ Once the dashboard is running, click the **Robot Icon** and try these:
 
 ---
 
+## 📸 Screenshots
+
+*Coming soon - Dashboard interface screenshots*
+
+---
+
+## 🏆 Hackathon Submission
+
 **Developed for UIDAI Hackathon 2024**
+
 *Bringing Data-Driven Transparency to a Billion Identities.*
-#   A G H I _ D a s h b o a r d  
- 
+
+---
+
+## 📄 License
+
+This project is developed for educational and hackathon purposes.
+
+---
+
+## 👥 Contributors
+
+Built with ❤️ for improving India's digital identity infrastructure.
