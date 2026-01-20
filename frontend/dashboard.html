@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGHI Dashboard - National Overview</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/extensions.css" rel="stylesheet">
+    <link href="css/top-performer.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-logo">AGHI</div>
+                <span class="brand-divider">|</span>
+                <span class="page-title">Executive Hub</span>
+            </div>
+            <div class="persona-switcher">
+                <button class="persona-btn active" onclick="dashboard.setPersona('national')" data-persona="national" title="National Overview">
+                    <i class="fas fa-globe-asia"></i> <span>National</span>
+                </button>
+                <button class="persona-btn" onclick="dashboard.setPersona('state')" data-persona="state" title="State Admin View">
+                    <i class="fas fa-map-marker-alt"></i> <span>State Admin</span>
+                </button>
+                <button class="persona-btn" onclick="dashboard.setPersona('ops')" data-persona="ops" title="Operations Manager">
+                    <i class="fas fa-cogs"></i> <span>Operations</span>
+                </button>
+            </div>
+            <div class="nav-links">
+                <button id="generateBriefing" class="btn-primary" style="margin-right: 1.5rem;">
+                    <i class="fas fa-file-contract"></i> Executive Briefing
+                </button>
+                <div class="live-signal-container">
+                    <div class="live-signal-orb"></div>
+                    <div class="live-signal-text">System Status: <span id="signalStatus">Operational</span></div>
+                </div>
+                <div class="nav-controls">
+                    <a href="/" class="nav-btn" title="Back to Home" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <select id="stateFilter" class="nav-select" onchange="dashboard.handleStateChange(this.value)">
+                        <option value="National">National View</option>
+                    </select>
+                    <button id="refreshBtn" class="nav-btn" title="Reload latest data from CSV files">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- National Intelligence Header -->
+    <div class="national-summary-header">
+        <div class="summary-meta">
+            <div class="meta-item">
+                <span class="label">System Vitality</span>
+                <span class="value excellent">OPTIMAL</span>
+            </div>
+            <div class="meta-item">
+                <span class="label">National Resilience</span>
+                <span class="value" id="nationalResilience">--</span>
+            </div>
+            <div class="meta-item">
+                <span class="label">Intervention Zones</span>
+                <span class="value critical" id="interventionZones">--</span>
+            </div>
+            <div class="meta-item maturity-meta">
+                <span class="label">Governance Maturity</span>
+                <div class="maturity-badge" id="maturityBadge">
+                    <span class="maturity-level">LEVEL --</span>
+                    <span class="maturity-text">--</span>
+                </div>
+            </div>
+            <div class="meta-item volume-meta">
+                <span class="label">System Volume</span>
+                <div class="volume-bar-wrap">
+                    <div class="volume-bar-fill" id="volumeBar" style="width: 78%"></div>
+                    <span class="volume-val">HIGH LOAD</span>
+                </div>
+            </div>
+        </div>
+        <div class="summary-tagline">
+            <i class="fas fa-shield-check"></i>
+            <span>AI monitoring active across 36 States/UTs. Integrity Score: 99.85%</span>
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <!-- KPI Cards -->
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <i class="fas fa-flag"></i>
+                <h3>National AGHI</h3>
+            </div>
+            <div class="kpi-value" id="nationalAGHI">--</div>
+            <div class="kpi-change" id="nationalChange">--</div>
+            <div class="kpi-trend">
+                <i class="fas fa-chart-line"></i>
+                <span>Last Updated: <span id="lastUpdated">--</span></span>
+            </div>
+            <div class="heartbeat-wrap"><div class="heartbeat-line"></div></div>
+        </div>
+        
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <i class="fas fa-check-circle"></i>
+                <h3>Update Success Rate</h3>
+            </div>
+            <div class="kpi-value" id="updateRate">--%</div>
+            <div class="kpi-subtext">Across all states</div>
+            <div class="heartbeat-wrap"><div class="heartbeat-line"></div></div>
+        </div>
+        
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Priority Regions</h3>
+            </div>
+            <div class="kpi-value" id="priorityRegions">--</div>
+            <div class="kpi-subtext">Requiring intervention</div>
+            <div class="heartbeat-wrap"><div class="heartbeat-line"></div></div>
+        </div>
+        
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <i class="fas fa-child"></i>
+                <h3>Digital Inclusion</h3>
+            </div>
+            <div class="kpi-value" id="inclusionScore">--%</div>
+            <div class="kpi-subtext">Youth (0-17) Coverage</div>
+            <div class="heartbeat-wrap"><div class="heartbeat-line"></div></div>
+        </div>
+        
+        <div class="kpi-card top-performer-special">
+            <div class="kpi-header">
+                <div class="icon-wrap-gold"><i class="fas fa-trophy"></i></div>
+                <h3>Top Performer</h3>
+            </div>
+            <div class="performer-display">
+                <div class="performer-rank-section">
+                    <div class="rank-badge-large">#1</div>
+                    <div class="rank-label">National Rank</div>
+                </div>
+                <div class="performer-details">
+                    <div class="performer-name" id="topState">--</div>
+                    <div class="performer-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">AGHI Score</div>
+                            <div class="metric-value" id="topScore">--</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Category</div>
+                            <div class="metric-value" id="topCategory">Excellent</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="performer-status-tag"><i class="fas fa-medal"></i> GOVERNANCE CHAMPION</div>
+        </div>
+        
+        <!-- Map -->
+        <div class="map-container lg-column">
+            <div class="chart-header">
+                <div class="breadcrumb-nav" id="mapBreadcrumb">
+                    <span class="breadcrumb-item active" data-view="National">India</span>
+                </div>
+                <div class="chart-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="mapSearch" placeholder="Search state/district...">
+                    </div>
+                </div>
+            </div>
+            <div id="indiaMap" style="height: 550px; width: 100%;"></div>
+            <div class="map-legend">
+                <div class="legend-item"><span class="dot critical"></span> Critical (<40)</div>
+                <div class="legend-item"><span class="dot warning"></span> Needs Improvement (40-60)</div>
+                <div class="legend-item"><span class="dot good"></span> Good (60-80)</div>
+                <div class="legend-item"><span class="dot excellent"></span> Excellent (>80)</div>
+            </div>
+        </div>
+        
+        <!-- Rankings -->
+        <div class="ranking-container sm-column">
+            <div class="chart-header">
+                <h3>State Rankings</h3>
+                <div class="chart-controls">
+                    <select id="rankingType" class="chart-select">
+                        <option value="top">Top Performers</option>
+                        <option value="bottom">Priority States</option>
+                    </select>
+                </div>
+            </div>
+            <div id="rankingList" class="ranking-list"></div>
+        </div>
+        
+        <!-- Trend Chart -->
+        <div class="trend-container lg-column">
+            <div class="chart-header">
+                <h3 id="trendHeader">Trend Analysis</h3>
+                <div class="chart-controls">
+                    <select id="trendState" class="chart-select" onchange="dashboard.handleStateChange(this.value)">
+                        <option value="National">National</option>
+                    </select>
+                    <select id="trendDistrict" class="chart-select" style="display: none;" onchange="dashboard.loadTrends()">
+                        <option value="">All Districts</option>
+                    </select>
+                </div>
+            </div>
+            <div class="trend-grid">
+                <div class="trend-grid-item" id="trendChart-aghi"></div>
+                <div class="trend-grid-item" id="trendChart-enrollment"></div>
+                <div class="trend-grid-item" id="trendChart-total_updates"></div>
+                <div class="trend-grid-item" id="trendChart-demo_updates"></div>
+                <div class="trend-grid-item" id="trendChart-bio_updates"></div>
+            </div>
+        </div>
+        
+        <!-- AI Directives Terminal -->
+        <div class="alert-container sm-column terminal-style">
+            <div class="chart-header">
+                <h3><i class="fas fa-terminal"></i> AI Command Directives</h3>
+                <span class="badge" id="alertCount">0</span>
+            </div>
+            <div id="alertList" class="alert-list-terminal"></div>
+            <div class="terminal-footer">
+                <span class="pulse-icon small"></span> SYSTEM MONITORING ACTIVE
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparative Performance Bar -->
+    <div class="comparative-bar-wrap">
+        <div class="comp-label">Performance Comparison: <span id="compStateName">National</span></div>
+        <div class="performance-bar-container">
+            <div class="p-bar national" id="barNational" style="width: 75%"><span class="p-val">National: 75</span></div>
+            <div class="p-bar current" id="barCurrent" style="width: 82%"><span class="p-val">Current: 82</span></div>
+            <div class="p-bar top" id="barTop" style="width: 95%"><span class="p-val">Top: 95</span></div>
+        </div>
+    </div>
+
+    <!-- AI Innovation Lab -->
+    <!-- Critical Operations Monitor -->
+    <section class="critical-ops-section">
+        <div class="ops-header">
+            <div class="ops-title">
+                <i class="fas fa-server"></i>
+                <div>
+                    <h2>Operational Integrity & SLA Monitor</h2>
+                    <p>Real-time tracked indicators for service delivery compliance and failure analysis</p>
+                </div>
+            </div>
+            <div class="ops-status">
+                <div class="status-indicator">
+                    <span class="pulse-dot green"></span>
+                    <span>System Uptime: 99.9%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="ops-grid">
+            <!-- SLA Compliance Module -->
+            <div class="ops-card sla-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-stopwatch"></i> SLA Compliance Tracker</h3>
+                    <span class="badge badge-success">On Target</span>
+                </div>
+                <div class="sla-metrics">
+                    <div class="sla-item">
+                        <div class="sla-label">
+                            <span>Enrollment TAT (< 3 Days)</span>
+                            <span class="sla-val">92%</span>
+                        </div>
+                        <div class="sla-progress">
+                            <div class="sla-bar" style="width: 92%"></div>
+                        </div>
+                    </div>
+                    <div class="sla-item">
+                        <div class="sla-label">
+                            <span>Update TAT (< 5 Days)</span>
+                            <span class="sla-val">87%</span>
+                        </div>
+                        <div class="sla-progress">
+                            <div class="sla-bar warning" style="width: 87%"></div>
+                        </div>
+                    </div>
+                    <div class="sla-item">
+                        <div class="sla-label">
+                            <span>Grievance Resolution (< 7 Days)</span>
+                            <span class="sla-val">95%</span>
+                        </div>
+                        <div class="sla-progress">
+                            <div class="sla-bar" style="width: 95%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Failure Analysis Module -->
+            <div class="ops-card failure-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-bug"></i> Failure Root Cause Analysis</h3>
+                    <div class="card-actions">
+                        <select class="ops-select">
+                            <option>Last 24 Hours</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="failure-chart-wrap">
+                    <div class="failure-stat">
+                        <div class="f-ring">
+                            <svg viewBox="0 0 36 36" class="circular-chart orange">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="circle" stroke-dasharray="15, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                            <div class="f-inc">15%</div>
+                        </div>
+                        <span>Bio-Mismatch</span>
+                    </div>
+                    <div class="failure-stat">
+                        <div class="f-ring">
+                            <svg viewBox="0 0 36 36" class="circular-chart blue">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="circle" stroke-dasharray="45, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                            <div class="f-inc">45%</div>
+                        </div>
+                        <span>Doc Quality</span>
+                    </div>
+                    <div class="failure-stat">
+                        <div class="f-ring">
+                            <svg viewBox="0 0 36 36" class="circular-chart red">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="circle" stroke-dasharray="10, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                            <div class="f-inc">10%</div>
+                        </div>
+                        <span>Tech Error</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operator Watchlist Module -->
+            <div class="ops-card watchlist-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-shield"></i> Operator Integrity Watchlist</h3>
+                    <button class="btn-xs">View All</button>
+                </div>
+                <div class="watchlist-table-wrap">
+                    <table class="watchlist-table">
+                        <thead>
+                            <tr>
+                                <th>Region</th>
+                                <th>Flagged Ops</th>
+                                <th>Risk Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="operatorWatchlist">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Executive Briefing Modal -->
+    <div id="briefingModal" class="modal">
+        <div class="modal-content briefing-content">
+            <div class="modal-header">
+                <div class="briefing-title">
+                    <i class="fas fa-file-invoice"></i>
+                    <div><h2>Executive Briefing Report</h2><span id="briefingTarget">Target: National</span></div>
+                </div>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="briefingBody">
+                <div class="loading-spinner"><i class="fas fa-circle-notch fa-spin"></i> <span>AI is synthesizing the report...</span></div>
+            </div>
+            <div class="modal-footer"><button class="btn-secondary" onclick="window.print()"><i class="fas fa-print"></i> Print Report</button></div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Widget -->
+    <div class="chat-widget">
+        <button class="chat-toggle-btn" onclick="dashboard.toggleChat()">
+            <i class="fas fa-robot"></i>
+        </button>
+        <div class="chat-window" id="aiChatWindow">
+            <div class="chat-header">
+                <i class="fas fa-brain"></i>
+                <span>AGHI Assistant</span>
+                <i class="fas fa-times" style="margin-left: auto; cursor: pointer;" onclick="dashboard.toggleChat()"></i>
+            </div>
+            <div class="chat-body" id="chatBody">
+                <div class="chat-msg bot">
+                    Hello! I am AGHI, your AI insights companion. Ask me to "Show Maharashtra" or "Analyze Enrollment".
+                </div>
+            </div>
+            <div class="chat-suggestions">
+                <div class="suggestion-chip" onclick="dashboard.handleSuggestion('Show me National')">National View</div>
+                <div class="suggestion-chip" onclick="dashboard.handleSuggestion('Show me Maharashtra')">State Admin</div>
+                <div class="suggestion-chip" onclick="dashboard.handleSuggestion('Alert Critical Ops')">Critical Ops</div>
+                <div class="suggestion-chip" onclick="dashboard.handleSuggestion('Generate Executive Briefing')">Gen Report</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Ask anything..." onkeypress="if(event.key==='Enter') dashboard.handleChat()">
+                <button class="chat-send-btn" onclick="dashboard.handleChat()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Strategic Intelligence Ticker -->
+    <footer class="intelligence-ticker">
+        <div class="ticker-label">
+            <i class="fas fa-microchip"></i>
+            <span>Live System Feed</span>
+        </div>
+        <div class="ticker-wrap">
+            <div class="ticker-move" id="liveTicker">
+                <span class="ticker-item"><i class="fas fa-info-circle"></i> System initialized. Monitoring 700+ districts...</span>
+                <span class="ticker-item"><i class="fas fa-check-double"></i> Data Integrity Check: Passed (99.8%)</span>
+                <span class="ticker-item"><i class="fas fa-star"></i> High Performance Alert: Indore, MP at 94.2 AGHI</span>
+                <span class="ticker-item"><i class="fas fa-exclamation-circle"></i> Service Velocity Lag detected in Southern regions.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/api.js?v=4.1"></script>
+    <script src="js/dashboard.js?v=4.1"></script>
+</body>
+</html>

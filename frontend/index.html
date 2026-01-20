@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGHI | AI-Powered GovTech Intelligence</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/extensions.css" rel="stylesheet">
+    <style>
+        body {
+            scroll-behavior: smooth;
+        }
+
+        .hero-v2 {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(242, 92, 45, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(11, 79, 156, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, transparent 100%);
+        }
+
+        .hero-v2::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            max-width: 1200px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .badge-ai {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(11, 79, 156, 0.08);
+            border: 1px solid rgba(11, 79, 156, 0.2);
+            padding: 0.6rem 1.25rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-title-v2 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 800;
+            line-height: 0.95;
+            margin-bottom: 2rem;
+            color: var(--dark-color);
+            background: none;
+            -webkit-text-fill-color: initial;
+            letter-spacing: -2px;
+        }
+
+        .hero-p {
+            font-size: 1.35rem;
+            color: var(--gray-color);
+            max-width: 850px;
+            margin: 0 auto 3.5rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-launch {
+            background: var(--primary-gradient);
+            padding: 1.25rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: 0.4s;
+            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.3);
+            border: none;
+            text-decoration: none;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .btn-launch:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-outline {
+            border: 2px solid #cbd5e1;
+            padding: 1.25rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 800;
+            transition: 0.3s;
+            text-decoration: none;
+            color: var(--dark-color);
+            background: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline:hover {
+            background: #cbd5e1;
+            border-color: #cbd5e1;
+            color: var(--dark-color);
+        }
+
+        .grid-hack {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .hack-card {
+            background: #fff;
+            backdrop-filter: blur(20px);
+            border: 1px solid #e2e8f0;
+            padding: 3rem;
+            border-radius: 24px;
+            transition: 0.4s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .hack-card:hover { 
+            border-color: var(--primary-color); 
+            transform: translateY(-8px);
+            background: rgba(30, 41, 59, 1);
+        }
+
+        .hack-card i {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .hack-card h3 { 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            margin-bottom: 1.25rem; 
+            color: var(--dark-color);
+        }
+
+        .hack-card p {
+            color: var(--gray-color);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .section-tag {
+            text-align: center;
+            color: var(--primary-color);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .section-title-big {
+            text-align: center;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 5rem;
+            color: var(--dark-color);
+            background: none;
+            -webkit-text-fill-color: initial;
+            letter-spacing: -1px;
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 8rem;
+            flex-wrap: wrap;
+        }
+
+        .tech-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+            font-weight: 700; 
+            color: var(--gray-color);
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .tech-item:hover { color: #fff; }
+        .tech-item i { font-size: 1.25rem; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-logo">AGHI</div>
+                <span class="brand-divider">|</span>
+                <span class="page-title">Digital Sovereignty</span>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link">Executive Dashboard</a>
+                <a href="insights.html" class="nav-link">AI Core</a>
+                <a href="methodology.html" class="nav-link">Framework</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-v2">
+        <div class="hero-inner">
+            <div class="badge-ai">
+                <i class="fas fa-sparkles"></i>
+                UIDAI Innovation Hackathon Submission 2026
+            </div>
+            <h1 class="hero-title-v2">Eliminating National Governance Blindspots</h1>
+            <p class="hero-p">
+                The Aadhaar Governance Health Index (AGHI) is a high-performance intelligence layer that identifies administrative friction and service exclusion in real-time.
+            </p>
+            <div class="cta-group">
+                <a href="dashboard.html" class="btn-launch">
+                    LAUNCH COMMAND CENTER <i class="fas fa-terminal"></i>
+                </a>
+                <a href="#vision" class="btn-outline">TECHNICAL VISION</a>
+            </div>
+
+            <div class="tech-stack">
+                <div class="tech-item"><i class="fab fa-python"></i> Python Backend</div>
+                <div class="tech-item"><i class="fas fa-brain"></i> Scikit Prophet ML</div>
+                <div class="tech-item"><i class="fas fa-microchip"></i> Anomaly Core</div>
+                <div class="tech-item"><i class="fas fa-chart-line"></i> Dynamic Viz</div>
+            </div>
+        </div>
+    </header>
+
+    <section id="vision" style="padding: 10rem 2rem;">
+        <div class="section-tag">Core Architecture</div>
+        <h2 class="section-title-big">Mastering Operational Complexity</h2>
+        
+        <div class="grid-hack">
+            <div class="hack-card">
+                <i class="fas fa-shield-virus"></i>
+                <h3>Isolation Forest Core</h3>
+                <p>Proprietary anomaly detection engine that identifies governance outliers and service friction in real-time before they impact service delivery.</p>
+            </div>
+            <div class="hack-card">
+                <i class="fas fa-calendar-check"></i>
+                <h3>Predictive Chronos</h3>
+                <p>Time-series forecasting models (Prophet) that extrapolate current performance to predict next-month governance bottlenecks across 700+ districts.</p>
+            </div>
+            <div class="hack-card">
+                <i class="fas fa-dna"></i>
+                <h3>Governance Nexus</h3>
+                <p>A multi-pillar scoring framework calculating Resilience, Inclusion, and Efficiency indices for a 360-degree view of administrative health.</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #ffffff; padding: 10rem 2rem; text-align: center; border-top: 1px solid var(--border-color);">
+        <div class="section-tag">Value Proposition</div>
+        <h2 class="section-title-big">Engineering National Resilience</h2>
+        
+        <div class="grid-hack" style="margin-bottom: 5rem;">
+            <div class="hack-card" style="border-top: 2px solid var(--primary-color);">
+                <h4 style="color: var(--primary-color); font-weight: 900; margin-bottom: 1rem; font-family: 'JetBrains Mono'">01. PROACTIVE BIAS</h4>
+                <p>Prophet AI models predict performance decay before it happens, allowing for pre-emptive resource dispatch.</p>
+            </div>
+            <div class="hack-card" style="border-top: 2px solid var(--secondary-color);">
+                <h4 style="color: var(--secondary-color); font-weight: 900; margin-bottom: 1rem; font-family: 'JetBrains Mono'">02. INCLUSION DRILLDOWN</h4>
+                <p>The Digital Inclusion Index reveals blocks where youth enrollment lags, ensuring no citizen is left behind.</p>
+            </div>
+            <div class="hack-card" style="border-top: 2px solid var(--accent-color);">
+                <h4 style="color: var(--accent-color); font-weight: 900; margin-bottom: 1rem; font-family: 'JetBrains Mono'">03. RESILIENCE BASELINE</h4>
+                <p>Inverse CoV modeling identifies stable success from outlier spikes, building a robust national benchmark.</p>
+            </div>
+        </div>
+
+        <a href="dashboard.html" class="btn-launch" style="width: fit-content; margin: 0 auto;">
+            ENTER SYSTEM CORE <i class="fas fa-door-open"></i>
+        </a>
+    </section>
+
+    <footer class="footer" style="background: transparent; border-top: 1px solid var(--border-color); padding: 5rem 2rem;">
+        <div class="footer-bottom">
+            <p style="color: var(--gray-color); letter-spacing: 1px; font-weight: 700; text-transform: uppercase; font-size: 0.7rem;">
+                © 2026 AGHI Project - UIDAI Innovation Hackathon Submission | Engineered for National Hub
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
